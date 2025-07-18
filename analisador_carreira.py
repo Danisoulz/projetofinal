@@ -2,6 +2,7 @@ import urllib.request
 import csv
 import io
 
+# Baixa o conteúdo do CSV da internet
 def baixar_csv(url):
     try:
         with urllib.request.urlopen(url) as resposta:
@@ -10,6 +11,7 @@ def baixar_csv(url):
     except Exception as e:
         return None
 
+# Converte o CSV para uma lista de dicionários (parecido com JSON)
 def transformar_em_lista_dicionarios(conteudo_csv):
     arquivo = io.StringIO(conteudo_csv)
     leitor = csv.reader(arquivo)
@@ -18,7 +20,7 @@ def transformar_em_lista_dicionarios(conteudo_csv):
 
     for i, linha in enumerate(leitor):
         if i == 0:
-            cabecalhos = linha
+            cabecalhos = linha  # A primeira linha são os nomes das colunas
         else:
             if len(linha) == len(cabecalhos):
                 item = {cabecalhos[i]: linha[i] for i in range(len(cabecalhos))}
@@ -26,6 +28,7 @@ def transformar_em_lista_dicionarios(conteudo_csv):
 
     return dados
 
+# Calcula a média salarial de cada profissão
 def media_por_profissao(dados):
     estatisticas = {}
     for linha in dados:
@@ -33,7 +36,7 @@ def media_por_profissao(dados):
         try:
             salario = float(linha.get('salario', 0))
         except:
-            continue
+            continue # Se não conseguir transformar em número, ignora
         if not profissao:
             continue
         if profissao not in estatisticas:
@@ -48,6 +51,7 @@ def media_por_profissao(dados):
 
     return estatisticas
 
+# Identifica a profissão com melhor salário por ano de experiência
 def melhor_por_experiencia(dados):
     melhor_profissao = None
     melhor_valor = 0
@@ -64,6 +68,7 @@ def melhor_por_experiencia(dados):
             continue
     return melhor_profissao, melhor_valor
 
+# Calcula a média salarial por faixa etária
 def media_por_faixa_etaria(dados):
     faixas = {
         '20-30': {'quantidade': 0, 'soma_salario': 0},
@@ -99,6 +104,7 @@ def media_por_faixa_etaria(dados):
 
     return faixas
 
+# Junta todas as análises e monta a resposta final
 def processar_dados_carreira(url_planilha):
     conteudo_csv = baixar_csv(url_planilha)
     if not conteudo_csv:
@@ -126,4 +132,3 @@ def processar_dados_carreira(url_planilha):
         resposta.append(f"- {faixa}: R$ {info['media']:.2f}")
 
     return "\n".join(resposta), None
-
