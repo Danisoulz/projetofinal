@@ -1,4 +1,4 @@
-# 💼 Chatbot de Análise Salarial
+# 🤖 Chatbot de Análise Salarial
 
 Este projeto é uma API que funciona como um chatbot: ele recebe uma mensagem com o comando "carreira" e responde com uma análise de dados salariais. Os dados vêm de uma planilha online (Google Sheets em formato CSV).
 
